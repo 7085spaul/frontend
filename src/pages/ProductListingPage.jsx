@@ -99,6 +99,11 @@ const ProductListingPage = () => {
   }, [debouncedSearchQuery, allProducts]);
 
   useEffect(() => {
+    // Skip if initial load not complete or allProducts not loaded
+    if (!initialLoadComplete || allProducts.length === 0) {
+      return;
+    }
+
     const fetchFilteredProducts = async () => {
       try {
         // Only show loading for non-search operations
@@ -182,7 +187,7 @@ const ProductListingPage = () => {
     };
 
     fetchFilteredProducts();
-  }, [debouncedSearchQuery, filters.category, debouncedMinPrice, debouncedMaxPrice, filters.brands, currentPage, productsPerPage, allProducts]);
+  }, [debouncedSearchQuery, filters.category, debouncedMinPrice, debouncedMaxPrice, filters.brands, currentPage, initialLoadComplete, allProducts.length];
 
   // Reset page when filters change
   useEffect(() => {
