@@ -1,7 +1,10 @@
 import { useFilters } from '../context/FilterContext';
+import { useState } from 'react';
 
 const Filters = ({ categories, brands }) => {
   const { filters, updateFilter, toggleBrand, resetFilters } = useFilters();
+  const [tempMinPrice, setTempMinPrice] = useState(filters.minPrice);
+  const [tempMaxPrice, setTempMaxPrice] = useState(filters.maxPrice);
 
   if (!categories || categories.length === 0) {
     return (
@@ -14,8 +17,9 @@ const Filters = ({ categories, brands }) => {
   }
 
   const handlePriceApply = () => {
-    // Price filter is applied immediately through state
-    console.log('Price filter applied:', filters.minPrice, filters.maxPrice);
+    // Only update the filters when Apply button is clicked
+    updateFilter('minPrice', tempMinPrice);
+    updateFilter('maxPrice', tempMaxPrice);
   };
 
   return (
@@ -24,7 +28,11 @@ const Filters = ({ categories, brands }) => {
 
       {/* Reset Button */}
       <button
-        onClick={resetFilters}
+        onClick={() => {
+          resetFilters();
+          setTempMinPrice('');
+          setTempMaxPrice('');
+        }}
         className="w-full mb-4 px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition text-sm"
       >
         Reset Filters
@@ -59,15 +67,15 @@ const Filters = ({ categories, brands }) => {
           <input
             type="number"
             placeholder="Min"
-            value={filters.minPrice}
-            onChange={(e) => updateFilter('minPrice', e.target.value)}
+            value={tempMinPrice}
+            onChange={(e) => setTempMinPrice(e.target.value)}
             className="w-1/2 p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#FF9900] text-sm"
           />
           <input
             type="number"
             placeholder="Max"
-            value={filters.maxPrice}
-            onChange={(e) => updateFilter('maxPrice', e.target.value)}
+            value={tempMaxPrice}
+            onChange={(e) => setTempMaxPrice(e.target.value)}
             className="w-1/2 p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#FF9900] text-sm"
           />
         </div>
