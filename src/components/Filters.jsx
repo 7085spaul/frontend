@@ -1,7 +1,18 @@
 import { useFilters } from '../context/FilterContext';
+import { useState, useEffect } from 'react';
 
 const Filters = ({ categories, brands }) => {
   const { filters, updateFilter, toggleBrand, resetFilters } = useFilters();
+
+  // Local state for price inputs — only committed to context on Apply
+  const [localMin, setLocalMin] = useState(filters.minPrice);
+  const [localMax, setLocalMax] = useState(filters.maxPrice);
+
+  // Keep local inputs in sync with active filter values (e.g. after reset or remount)
+  useEffect(() => {
+    setLocalMin(filters.minPrice);
+    setLocalMax(filters.maxPrice);
+  }, [filters.minPrice, filters.maxPrice]);
 
   if (!categories || categories.length === 0) {
     return (
@@ -14,8 +25,14 @@ const Filters = ({ categories, brands }) => {
   }
 
   const handlePriceApply = () => {
-    // Price filter is applied immediately through state
-    console.log('Price filter applied:', filters.minPrice, filters.maxPrice);
+    updateFilter('minPrice', localMin);
+    updateFilter('maxPrice', localMax);
+  };
+
+  const handleReset = () => {
+    setLocalMin('');
+    setLocalMax('');
+    resetFilters();
   };
 
   return (
@@ -24,7 +41,7 @@ const Filters = ({ categories, brands }) => {
 
       {/* Reset Button */}
       <button
-        onClick={resetFilters}
+        onClick={handleReset}
         className="w-full mb-4 px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition text-sm"
       >
         Reset Filters
@@ -59,15 +76,15 @@ const Filters = ({ categories, brands }) => {
           <input
             type="number"
             placeholder="Min"
-            value={filters.minPrice}
-            onChange={(e) => updateFilter('minPrice', e.target.value)}
+            value={localMin}
+            onChange={(e) => setLocalMin(e.target.value)}
             className="w-1/2 p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#FF9900] text-sm"
           />
           <input
             type="number"
             placeholder="Max"
-            value={filters.maxPrice}
-            onChange={(e) => updateFilter('maxPrice', e.target.value)}
+            value={localMax}
+            onChange={(e) => setLocalMax(e.target.value)}
             className="w-1/2 p-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#FF9900] text-sm"
           />
         </div>
