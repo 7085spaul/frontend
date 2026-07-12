@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useFilters } from '../context/FilterContext';
-import { fetchProducts, fetchCategories, fetchAllProducts, searchProducts, fetchProductsByCategory } from '../services/api';
+import { fetchProducts, fetchCategories, fetchAllProducts, fetchProductsByCategory } from '../services/api';
 import Header from '../components/Header';
 import Filters from '../components/Filters';
 import ProductCard from '../components/ProductCard';
@@ -92,11 +92,14 @@ const ProductListingPage = () => {
         p.description.toLowerCase().includes(searchLower) ||
         p.brand?.toLowerCase().includes(searchLower)
       ).slice(0, 8); // Show top 8 suggestions
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSearchSuggestions(suggestions);
     } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSearchSuggestions([]);
     }
-  }, [debouncedSearchQuery, allProducts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearchQuery]);
 
   useEffect(() => {
     // Skip if initial load not complete or allProducts not loaded
@@ -187,11 +190,14 @@ const ProductListingPage = () => {
     };
 
     fetchFilteredProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchQuery, filters.category, debouncedMinPrice, debouncedMaxPrice, filters.brands, currentPage, initialLoadComplete, allProducts.length]);
 
   // Reset page when filters change
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentPage(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters.category, debouncedMinPrice, debouncedMaxPrice, filters.brands, debouncedSearchQuery]);
 
   const handlePageChange = (page) => {

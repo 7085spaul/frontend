@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-const Header = ({ searchQuery, setSearchQuery, onMenuClick, isFiltersVisible, searchSuggestions = [] }) => {
+const Header = ({ searchQuery, setSearchQuery, onMenuClick, searchSuggestions = [] }) => {
   return (
     <header className="bg-[#131921] text-white sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-3">

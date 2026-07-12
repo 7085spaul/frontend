@@ -1,8 +1,16 @@
 import { Link } from 'react-router-dom';
+import { useMemo } from 'react';
 import { useFilters } from '../context/FilterContext';
 
 const ProductCard = ({ product }) => {
   const { updateFilter } = useFilters();
+
+  // Generate deterministic review count from product ID (pure function)
+  const reviewCount = useMemo(() => {
+    // Use product ID to generate a pseudo-random but consistent number
+    const seed = product.id * 9973; // Prime number for better distribution
+    return (seed % 5000) + 100;
+  }, [product.id]);
 
   const renderStars = (rating) => {
     const stars = [];
@@ -47,7 +55,7 @@ const ProductCard = ({ product }) => {
               {renderStars(product.rating)}
             </div>
             <span className="text-xs text-[#007185] hover:text-[#C7511F] cursor-pointer">
-              ({Math.floor(Math.random() * 5000) + 100})
+              ({reviewCount})
             </span>
           </div>
           <p className="text-xl font-bold text-[#B12704] mb-1">${product.price}</p>

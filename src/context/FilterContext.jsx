@@ -2,6 +2,15 @@ import { createContext, useContext, useState } from 'react';
 
 const FilterContext = createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
+export const useFilters = () => {
+  const context = useContext(FilterContext);
+  if (!context) {
+    throw new Error('useFilters must be used within a FilterProvider');
+  }
+  return context;
+};
+
 export const FilterProvider = ({ children }) => {
   const [filters, setFilters] = useState({
     category: '',
@@ -42,12 +51,4 @@ export const FilterProvider = ({ children }) => {
       {children}
     </FilterContext.Provider>
   );
-};
-
-export const useFilters = () => {
-  const context = useContext(FilterContext);
-  if (!context) {
-    throw new Error('useFilters must be used within a FilterProvider');
-  }
-  return context;
 };
