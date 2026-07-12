@@ -187,7 +187,7 @@ const ProductListingPage = () => {
     };
 
     fetchFilteredProducts();
-  }, [debouncedSearchQuery, filters.category, debouncedMinPrice, debouncedMaxPrice, filters.brands, currentPage, initialLoadComplete, allProducts.length];
+  }, [debouncedSearchQuery, filters.category, debouncedMinPrice, debouncedMaxPrice, filters.brands, currentPage, initialLoadComplete, allProducts.length]);
 
   // Reset page when filters change
   useEffect(() => {
